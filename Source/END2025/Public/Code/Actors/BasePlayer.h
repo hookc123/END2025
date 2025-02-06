@@ -16,8 +16,16 @@ class END2025_API ABasePlayer : public ABaseCharacter
 public:
 	ABasePlayer();
 protected:
-	// Add a SpringArmComponent to the player
-	class USpringArmComponent* SpringArm;
-	// Add a CameraComponent to the SpringArmComponent
-	class UCameraComponent* Camera;
+	/** The Spring Arm component that controls camera distance and rotation */
+	UPROPERTY(Category = "Default", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class USpringArmComponent> SpringArm;
+
+	/** The Camera component attached to the Spring Arm */
+	UPROPERTY(Category = "Default", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UCameraComponent> Camera;
+
+
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+private:
 };

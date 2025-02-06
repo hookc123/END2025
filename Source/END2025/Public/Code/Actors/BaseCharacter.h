@@ -6,7 +6,7 @@
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
-UCLASS()
+UCLASS(Abstract)
 class END2025_API ABaseCharacter : public ACharacter
 {
 	GENERATED_BODY()
@@ -25,5 +25,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+private:
+	/** The main skeletal mesh associated with this Character (optional sub-object). */
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USkeletalMeshComponent> baseCharacterMesh;
 };

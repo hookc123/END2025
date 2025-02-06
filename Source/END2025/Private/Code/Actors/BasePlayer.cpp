@@ -16,3 +16,15 @@ ABasePlayer::ABasePlayer()
 	Camera->SetupAttachment(SpringArm);
 
 }
+
+void ABasePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	// Do not forget to call parent function
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	// Bind the axis inputs
+	
+	// Use Pawn Control Rotation in the spring arm
+	SpringArm->bUsePawnControlRotation = true;
+	PlayerInputComponent->BindAxis("TurnRight"	, this, &ABasePlayer::AddControllerYawInput  );
+	PlayerInputComponent->BindAxis("LookUp"		, this, &ABasePlayer::AddControllerPitchInput);
+}
