@@ -28,4 +28,6 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
+	void InputAxisMoveForward(float AxisValue);
+	void InputAxisStrafe(float AxisValue);
 };

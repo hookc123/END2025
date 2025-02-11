@@ -27,4 +27,30 @@ void ABasePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	SpringArm->bUsePawnControlRotation = true;
 	PlayerInputComponent->BindAxis("TurnRight"	, this, &ABasePlayer::AddControllerYawInput  );
 	PlayerInputComponent->BindAxis("LookUp"		, this, &ABasePlayer::AddControllerPitchInput);
+
+	// Player Movement
+	PlayerInputComponent->BindAxis("MoveForward", this, &ABasePlayer::InputAxisMoveForward);
+	PlayerInputComponent->BindAxis("Strafe", this, &ABasePlayer::InputAxisStrafe);
+}
+
+void ABasePlayer::InputAxisMoveForward(float AxisValue)
+{
+	// Get control Rotation
+	FRotator Break = GetControlRotation();
+	FRotator Make(0., Break.Yaw, 0.);
+	FVector WorldDirection = Make.Vector();
+
+	// Move the actor forward
+	AddMovementInput(WorldDirection, AxisValue);
+	//AddMovementInput(FRotator(0., GetControlRotation().Yaw, 0).Vector(), AxisValue);
+}
+
+void ABasePlayer::InputAxisStrafe(float AxisValue)
+{
+	FRotator Break = GetControlRotation();
+	FRotator Make(0., Break.Yaw + 90, 0.);
+	FVector WorldDirection = Make.Vector();
+
+	// Strafe the actor 
+	AddMovementInput(WorldDirection, AxisValue);
 }
