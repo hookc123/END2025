@@ -19,5 +19,11 @@ void UCharacterAnimation::NativeUpdateAnimation(float DeltaSeconds)
 	}
 	else {
 		// Not Valid
+		PreviewWindowUpdate();
 	}
+}
+
+void UCharacterAnimation::PreviewWindowUpdate_Implementation()
+{
+
 }

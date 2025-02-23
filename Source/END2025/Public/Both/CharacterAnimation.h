@@ -20,4 +20,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Defaults")
 	float direction = 0.0f;
+	UFUNCTION(BlueprintNativeEvent)
+	void PreviewWindowUpdate();
+	virtual void PreviewWindowUpdate_Implementation();
 };
