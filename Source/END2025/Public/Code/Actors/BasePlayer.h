@@ -24,6 +24,12 @@ protected:
 	UPROPERTY(Category = "Default", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UCameraComponent> Camera;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Weapon)
+	TSubclassOf<AActor> WeaponClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
+	UChildActorComponent* ChildActorComponent;
+
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 

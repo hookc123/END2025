@@ -4,6 +4,7 @@
 #include "Code/Actors/BasePlayer.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Code/Actors/BaseRifle.h"
 
 ABasePlayer::ABasePlayer()
 {
@@ -15,6 +16,12 @@ ABasePlayer::ABasePlayer()
 	Camera = CreateDefaultSubobject<UCameraComponent>("Camera");
 	Camera->SetupAttachment(SpringArm);
 
+
+	WeaponClass = ABaseRifle::StaticClass();
+
+	// Create Child Actor Component
+	ChildActorComponent = CreateDefaultSubobject<UChildActorComponent>("ChildActorComponent");
+	ChildActorComponent->SetupAttachment(GetMesh(), "PlaceWeaponHere");
 }
 
 void ABasePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -31,6 +38,23 @@ void ABasePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	// Player Movement
 	PlayerInputComponent->BindAxis("MoveForward", this, &ABasePlayer::InputAxisMoveForward);
 	PlayerInputComponent->BindAxis("Strafe", this, &ABasePlayer::InputAxisStrafe);
+	
+	if (ChildActorComponent) {
+		// Set the child actor class
+		if (WeaponClass)
+		{
+			ChildActorComponent->SetChildActorClass(WeaponClass);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("ChildActorComponent is not set in %s"), *GetName());
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("WeaponClass is not set in %s"), *GetName());
+	}
+
 }
 
 void ABasePlayer::InputAxisMoveForward(float AxisValue)
