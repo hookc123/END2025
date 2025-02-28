@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Both/CharacterAnimation.h"
 #include "BaseCharacter.generated.h"
 
 UCLASS(Abstract)
@@ -16,8 +17,22 @@ public:
 	ABaseCharacter();
 
 protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Weapon)
+	TSubclassOf<AActor> WeaponClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
+	UChildActorComponent* ChildActorComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	class ABaseRifle* WeaponObject;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+	class UCharacterAnimation* CharacterAnimation;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	void OnFirePressed();
+
 
 public:	
 	// Called every frame

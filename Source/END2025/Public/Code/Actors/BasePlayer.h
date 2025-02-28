@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Code/Actors/BaseCharacter.h"
-#include "Both/CharacterAnimation.h"
 #include "BasePlayer.generated.h"
 
 /**
@@ -25,21 +24,8 @@ protected:
 	UPROPERTY(Category = "Default", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UCameraComponent> Camera;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Weapon)
-	TSubclassOf<AActor> WeaponClass;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	UChildActorComponent* ChildActorComponent;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	class ABaseRifle* WeaponObject;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
-	class UCharacterAnimation* CharacterAnimation;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	void OnFirePressed();
 
 private:
 	void InputAxisMoveForward(float AxisValue);
