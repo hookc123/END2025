@@ -6,12 +6,13 @@
 #include "Components/StaticMeshComponent.h"
 #include "../End2025.h"
 #include "UObject/ConstructorHelpers.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 
 // Sets default values
 AProjectile::AProjectile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	SphereCollision = CreateDefaultSubobject<USphereComponent>("SphereCollision");
 	SetRootComponent(SphereCollision);
@@ -21,9 +22,9 @@ AProjectile::AProjectile()
 	SphereMesh->SetupAttachment(SphereCollision);
 
 	SphereCollision->OnComponentHit.AddDynamic(this, &AProjectile::HandleHit);
+	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AProjectile::HandleOverlap);
 
-	
-	//
+	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMovement");
 
 	//SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AProjectile::HandleHit);
 
@@ -33,16 +34,17 @@ AProjectile::AProjectile()
 	//SphereMesh->SetStaticMesh(Asset.Object);
 	// END EXAMPLE
 
+	SphereCollision->SetWorldScale3D(Scale);
 }
 
 // Called when the game starts or when spawned
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AProjectile::K2_DestroyActor, 3.0f);
+	SphereCollision->SetWorldScale3D(Scale);
 
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AProjectile::K2_DestroyActor, DestroyTime);
 
 	//
 	
@@ -53,6 +55,11 @@ void AProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AProjectile::HandleOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	Destroy();
 }
 
 void AProjectile::HandleHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)

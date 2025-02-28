@@ -15,11 +15,14 @@ public:
 	// Sets default values for this actor's properties
 	ABaseRifle();
 
+	//UFUNCTION(BlueprintCallable, Category = Weapon)
+	void Attack();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Defaults)
 	class USkeletalMeshComponent* baseRifleMesh;
 
 	// Parent Pawn
@@ -30,8 +33,9 @@ protected:
 	TSubclassOf<AActor> ProjectileClass;
 
 	// Attack function
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-	void Attack();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Weapon)
+	FName WeaponSocketName;
 
 public:	
 	// Called every frame

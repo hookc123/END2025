@@ -17,13 +17,20 @@ void UCharacterAnimation::NativeUpdateAnimation(float DeltaSeconds)
 		velocity = returnValue.Size();
 		direction = UKismetAnimationLibrary::CalculateDirection(pawn->GetVelocity(), pawn->GetActorRotation());
 	}
-	else {
 		// Not Valid
 		PreviewWindowUpdate();
-	}
+}
+
+void UCharacterAnimation::FireAnimation()
+{
+	PlaySlotAnimationAsDynamicMontage(FireAsset,ActionSlotName);
 }
 
 void UCharacterAnimation::PreviewWindowUpdate_Implementation()
 {
-
+	if (DebugFire)
+	{
+		DebugFire = !DebugFire;
+		FireAnimation();
+	}
 }

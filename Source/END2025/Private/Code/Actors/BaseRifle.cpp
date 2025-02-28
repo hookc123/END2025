@@ -36,21 +36,53 @@ void ABaseRifle::BeginPlay()
 
 void ABaseRifle::Attack()
 {
-	auto pos = GetActorLocation();
-	auto rot = GetActorRotation();
+	FVector pos;
+	/*if (baseRifleMesh)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Base Rifle Mesh is set in %s"), *GetName());
+		pos = baseRifleMesh->GetSocketLocation(WeaponSocketName);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Base Rifle Mesh is not set in %s"), *GetName());
+	}*/
+	auto rot = ParentPawn->GetBaseAimRotation();
 	auto controller = ParentPawn->GetController();
 
-	if (ProjectileClass)
+	
+	/*if (ProjectileClass)
 	{
 		FActorSpawnParameters spawnParams;
 		spawnParams.Owner = controller;
 		spawnParams.Instigator = ParentPawn;
 		GetWorld()->SpawnActor<AProjectile>(ProjectileClass, pos, rot, spawnParams);
+
+		UE_LOG(LogTemp, Warning, TEXT("Projectile Class is set in %s"), *GetName());
+
 	}
 	else
 	{
 		UE_LOG(LogTemp, Error, TEXT("Projectile Class is not set in %s"), *GetName());
+	}*/
+
+	pos = baseRifleMesh->GetSocketLocation(WeaponSocketName);
+
+	
+
+	FActorSpawnParameters spawnParams;
+	spawnParams.Owner = controller;
+	spawnParams.Instigator = ParentPawn;
+	auto SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, pos, rot, spawnParams);
+
+	if (SpawnedProjectile)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Successfully spawned projectile!"));
 	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Projectile failed to spawn!"));
+	}
+
 }
 
 // Called every frame

@@ -18,10 +18,10 @@ ABasePlayer::ABasePlayer()
 
 
 	WeaponClass = ABaseRifle::StaticClass();
-
 	// Create Child Actor Component
 	ChildActorComponent = CreateDefaultSubobject<UChildActorComponent>("ChildActorComponent");
 	ChildActorComponent->SetupAttachment(GetMesh(), "PlaceWeaponHere");
+	//WeaponObject = ChildActorComponent->GetChildActor();//Cast<ABaseRifle>(ChildActorComponent->GetChildActor());
 }
 
 void ABasePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -55,6 +55,37 @@ void ABasePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		UE_LOG(LogTemp, Error, TEXT("WeaponClass is not set in %s"), *GetName());
 	}
 
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ABasePlayer::OnFirePressed);
+}
+
+void ABasePlayer::OnFirePressed()
+{
+	CharacterAnimation = Cast<UCharacterAnimation>(GetMesh()->GetAnimInstance());
+	if (CharacterAnimation)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Character Animation is Valid"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Character Animation is not Valid"));
+	}
+	WeaponObject = Cast<ABaseRifle>(ChildActorComponent->GetChildActor());
+	if (WeaponObject)
+	{
+		Cast<ABaseRifle>(ChildActorComponent->GetChildActor())->Attack();
+		if (CharacterAnimation)
+		{
+			CharacterAnimation->DebugFire = true;
+		}
+	}
+
+	/*if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
+	{
+		if (UABP_CharacterAnimation* MyAnimBP = Cast<UABP_CharacterAnimation>(AnimInstance))
+		{
+			MyAnimBP->FireAnimation();
+		}
+	}*/
 }
 
 void ABasePlayer::InputAxisMoveForward(float AxisValue)
