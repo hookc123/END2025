@@ -25,7 +25,7 @@ protected:
 	TObjectPtr<class UCameraComponent> Camera;
 
 
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent);// override;
 
 private:
 	void InputAxisMoveForward(float AxisValue);

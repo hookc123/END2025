@@ -5,8 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Both/CharacterAnimation.h"
+#include "Code/Utility/Health.h"
 #include "BaseCharacter.generated.h"
-
 UCLASS(Abstract)
 class END2025_API ABaseCharacter : public ACharacter
 {
@@ -29,17 +29,19 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 	class UCharacterAnimation* CharacterAnimation;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
+	UHealth* HealthComponent;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	void OnFirePressed();
-
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 private:
 	/** The main skeletal mesh associated with this Character (optional sub-object). */
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))

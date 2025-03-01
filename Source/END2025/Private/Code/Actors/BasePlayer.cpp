@@ -20,7 +20,7 @@ ABasePlayer::ABasePlayer()
 void ABasePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Do not forget to call parent function
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	//Super::SetupPlayerInputComponent(PlayerInputComponent);
 	// Bind the axis inputs
 	
 	// Use Pawn Control Rotation in the spring arm

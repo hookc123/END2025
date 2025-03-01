@@ -45,8 +45,6 @@ void AProjectile::BeginPlay()
 
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AProjectile::K2_DestroyActor, DestroyTime);
-
-	//
 	
 }
 

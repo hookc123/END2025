@@ -20,10 +20,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Defaults")
 	bool DebugFire = false;
 
-protected:
-
 	UFUNCTION(BlueprintCallable, Category = "Animation")
 	void FireAnimation();
+
+
+protected:
+
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Defaults")
 	UAnimSequenceBase* FireAsset;

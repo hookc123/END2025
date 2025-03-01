@@ -18,6 +18,9 @@ ABaseCharacter::ABaseCharacter()
 	ChildActorComponent = CreateDefaultSubobject<UChildActorComponent>("ChildActorComponent");
 	ChildActorComponent->SetupAttachment(GetMesh(), "PlaceWeaponHere");
 
+	// Create Health Component
+	HealthComponent = CreateDefaultSubobject<UHealth>("HealthComponent");
+
 }
 
 // Called when the game starts or when spawned
@@ -41,7 +44,13 @@ void ABaseCharacter::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("WeaponClass is not set in %s"), *GetName());
 	}
 
+	WeaponObject = Cast<ABaseRifle>(ChildActorComponent->GetChildActor());
+	CharacterAnimation = Cast<UCharacterAnimation>(GetMesh()->GetAnimInstance());
 
+	if (WeaponObject && CharacterAnimation)
+    {
+		WeaponObject->CallOnRifleAttack.AddDynamic(CharacterAnimation, &UCharacterAnimation::FireAnimation);
+	}
 }
 
 void ABaseCharacter::OnFirePressed()
@@ -58,11 +67,7 @@ void ABaseCharacter::OnFirePressed()
 	WeaponObject = Cast<ABaseRifle>(ChildActorComponent->GetChildActor());
 	if (WeaponObject)
 	{
-		Cast<ABaseRifle>(ChildActorComponent->GetChildActor())->Attack();
-		if (CharacterAnimation)
-		{
-			CharacterAnimation->DebugFire = true;
-		}
+		WeaponObject->Attack();
 	}
 
 }
@@ -76,9 +81,9 @@ void ABaseCharacter::Tick(float DeltaTime)
 }
 
 // Called to bind functionality to input
-void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
+//void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+//{
+//	Super::SetupPlayerInputComponent(PlayerInputComponent);
+//
+//}
 

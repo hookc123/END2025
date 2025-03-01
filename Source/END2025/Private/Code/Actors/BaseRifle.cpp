@@ -36,6 +36,8 @@ void ABaseRifle::BeginPlay()
 
 void ABaseRifle::Attack()
 {
+	AProjectile* SpawnedProjectile = nullptr;
+
 	FVector pos;
 	/*if (baseRifleMesh)
 	{
@@ -48,41 +50,43 @@ void ABaseRifle::Attack()
 	}*/
 	auto rot = ParentPawn->GetBaseAimRotation();
 	auto controller = ParentPawn->GetController();
-
 	
-	/*if (ProjectileClass)
-	{
-		FActorSpawnParameters spawnParams;
-		spawnParams.Owner = controller;
-		spawnParams.Instigator = ParentPawn;
-		GetWorld()->SpawnActor<AProjectile>(ProjectileClass, pos, rot, spawnParams);
-
-		UE_LOG(LogTemp, Warning, TEXT("Projectile Class is set in %s"), *GetName());
-
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Projectile Class is not set in %s"), *GetName());
-	}*/
-
 	pos = baseRifleMesh->GetSocketLocation(WeaponSocketName);
-
-	
 
 	FActorSpawnParameters spawnParams;
 	spawnParams.Owner = controller;
 	spawnParams.Instigator = ParentPawn;
-	auto SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, pos, rot, spawnParams);
+
+	if(CanShoot())
+	SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, pos, rot, spawnParams);
 
 	if (SpawnedProjectile)
 	{
+		ActionHappening = true;
 		UE_LOG(LogTemp, Warning, TEXT("Successfully spawned projectile!"));
+
+		// Define a delegate for the event
+		FTimerDelegate TimerDelegate;
+		TimerDelegate.BindUFunction(this, FName("ActionStopped"));
+
+		// Set a timer that calls ActionStopped using the delegate
+		GetWorldTimerManager().SetTimer(timer, TimerDelegate, ResetTime, false);
+
+		// Broadcast to the Delegate CallOnRifleAttack
+		CallOnRifleAttack.Broadcast();
+
 	}
 	else
 	{
 		UE_LOG(LogTemp, Error, TEXT("Projectile failed to spawn!"));
 	}
 
+	
+}
+
+void ABaseRifle::ActionStopped()
+{
+	ActionHappening = false;
 }
 
 // Called every frame
@@ -90,5 +94,10 @@ void ABaseRifle::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+bool ABaseRifle::CanShoot() const
+{
+	return !ActionHappening;
 }
 

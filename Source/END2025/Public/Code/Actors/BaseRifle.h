@@ -1,10 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "BaseRifle.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FCallOnRifleAttack);
 
 UCLASS()
 class END2025_API ABaseRifle : public AActor
@@ -37,10 +37,29 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Weapon)
 	FName WeaponSocketName;
 
+	// Make custom event
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void ActionStopped();
+
+	FTimerHandle timer;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Weapon)
+	float ResetTime;
+
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// Create a delegate
+	UPROPERTY(BlueprintAssignable, Category = Delagate)
+	FCallOnRifleAttack CallOnRifleAttack;
+
+
+
 private:
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	bool CanShoot() const;
+	bool ActionHappening;
 
 };
