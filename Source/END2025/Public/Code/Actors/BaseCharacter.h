@@ -34,6 +34,7 @@ protected:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
 	void OnFirePressed();
 
 public:	
@@ -42,6 +43,7 @@ public:
 
 	// Called to bind functionality to input
 	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
 private:
 	/** The main skeletal mesh associated with this Character (optional sub-object). */
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))

@@ -15,15 +15,14 @@ class END2025_API UPlayerHUD : public UUserWidget
 	GENERATED_BODY()
 public:
 
-
+	UFUNCTION(BlueprintCallable)
+	void SetHealth(float p);
 
 protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = HUD, meta = (BindWidget))
 	class UProgressBar* HealthBar;
 
-	UFUNCTION(BlueprintCallable)
-	void SetHealth(float p);
 
 private:
 

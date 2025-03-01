@@ -75,13 +75,7 @@ void ABaseRifle::Attack()
 		// Broadcast to the Delegate CallOnRifleAttack
 		CallOnRifleAttack.Broadcast();
 
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Projectile failed to spawn!"));
-	}
-
-	
+	}	
 }
 
 void ABaseRifle::ActionStopped()

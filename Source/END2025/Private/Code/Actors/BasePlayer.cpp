@@ -17,6 +17,61 @@ ABasePlayer::ABasePlayer()
 	Camera->SetupAttachment(SpringArm);
 }
 
+void ABasePlayer::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// Get Player Controller
+	PlayerController = Cast<APlayerController>(GetController());
+
+	// Ensure PlayerController exists
+	if (!PlayerController)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("We Need A Player Controller to spawn the HUD"));
+		return;
+	}
+	if (!HealthComponent)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("We Need A Health Component to spawn the HUD"));
+	}
+
+	// Create and add HUD to viewport
+	if (HUDClass)
+	{
+		HUDWidget = CreateWidget(PlayerController, HUDClass);
+		//if (HUDWidget)
+		{
+			HUDWidget->AddToViewport();
+		}
+		if (HUDWidget)
+		{
+			UPlayerHUD* PlayerHUD = Cast<UPlayerHUD>(HUDWidget);
+			if (PlayerHUD)
+			{
+				HealthComponent->OnHurt.AddDynamic(PlayerHUD, &UPlayerHUD::SetHealth);
+				HealthComponent->OnDeath.AddDynamic(PlayerHUD, &UPlayerHUD::SetHealth);
+			}
+
+			if (HUDClass)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("HUDClass is valid: %s"), *HUDClass->GetName());
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("HUDClass is NULL at runtime!"));
+			}
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("HUDClass is NULL at runtime!"));
+	}
+
+	// Bind Health Events
+	//BindHealthEvents();
+}
+
+
 void ABasePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Do not forget to call parent function
@@ -56,3 +111,6 @@ void ABasePlayer::InputAxisStrafe(float AxisValue)
 	// Strafe the actor 
 	AddMovementInput(WorldDirection, AxisValue);
 }
+
+
+

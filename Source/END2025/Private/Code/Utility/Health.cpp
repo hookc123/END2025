@@ -14,10 +14,7 @@ void UHealth::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Set initial health
-	CurrentHealth = MaxHealth;
-
-	// Bind to the owning actor's damage event
+	// Bind to damage events
 	AActor* Owner = GetOwner();
 	if (Owner)
 	{
@@ -27,15 +24,21 @@ void UHealth::BeginPlay()
 
 void UHealth::HandleDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
-	if (Damage <= 0.0f) return;
+	if (Damage <= 0.0f)
+	{
+		return;
+	}
 
-	CurrentHealth -= Damage;
-	OnHurt.Broadcast(Damage);
+	// Apply damage as a reduction
+	CurrentHealth = FMath::Clamp(CurrentHealth - Damage, 0.0f, MaxHealth);
 
+	// Fire OnHurt event with the ratio
+	OnHurt.Broadcast(CurrentHealth / MaxHealth);
+
+	// If health reaches 0, trigger death
 	if (CurrentHealth <= 0.0f)
 	{
-		CurrentHealth = 0.0f;
-		OnDeath.Broadcast();
+		OnDeath.Broadcast(0.0);
 	}
 }
 

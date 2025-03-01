@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Code/Actors/BaseCharacter.h"
+#include "Both/PlayerHUD.h"
 #include "BasePlayer.generated.h"
 
 /**
@@ -16,18 +17,30 @@ class END2025_API ABasePlayer : public ABaseCharacter
 public:
 	ABasePlayer();
 protected:
-	/** The Spring Arm component that controls camera distance and rotation */
-	UPROPERTY(Category = "Default", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class USpringArmComponent> SpringArm;
 
-	/** The Camera component attached to the Spring Arm */
-	UPROPERTY(Category = "Default", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UCameraComponent> Camera;
-
+	virtual void BeginPlay() override;
 
 	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent);// override;
 
+	UPROPERTY(Category = "Default", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class USpringArmComponent> SpringArm;
+
+	UPROPERTY(Category = "Default", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UCameraComponent> Camera;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "HUD")
+	TSubclassOf<UPlayerHUD> HUDClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
+	APlayerController* PlayerController;
+
+
 private:
+
+	UPROPERTY()
+	UUserWidget* HUDWidget;
 	void InputAxisMoveForward(float AxisValue);
+
 	void InputAxisStrafe(float AxisValue);
+
 };
