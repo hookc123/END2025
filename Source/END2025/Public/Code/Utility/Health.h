@@ -18,7 +18,7 @@ public:
 	UHealth();
 
 	// Handles when the actor takes damage
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void HandleDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
 
 protected:

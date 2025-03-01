@@ -32,12 +32,19 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
 	FVector Scale;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
+	float Damage=1.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class AController* OwnerController;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void HandleOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()

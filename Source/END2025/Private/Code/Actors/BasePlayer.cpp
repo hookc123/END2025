@@ -39,7 +39,7 @@ void ABasePlayer::BeginPlay()
 	if (HUDClass)
 	{
 		HUDWidget = CreateWidget(PlayerController, HUDClass);
-		//if (HUDWidget)
+		if (HUDWidget)
 		{
 			HUDWidget->AddToViewport();
 		}
