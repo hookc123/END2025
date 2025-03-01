@@ -22,6 +22,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = HUD, meta = (BindWidget))
 	class UProgressBar* HealthBar;
 
+	UFUNCTION(BlueprintCallable)
+	void SetHealth(float p);
+
 private:
 
 
