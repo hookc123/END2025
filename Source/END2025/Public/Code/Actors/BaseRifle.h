@@ -18,6 +18,9 @@ public:
 	//UFUNCTION(BlueprintCallable, Category = Weapon)
 	void Attack();
 
+	UFUNCTION(BlueprintPure, Category = Weapon)
+	FVector GetSource();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -45,7 +48,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Weapon)
 	float ResetTime;
-
 
 public:	
 	// Called every frame

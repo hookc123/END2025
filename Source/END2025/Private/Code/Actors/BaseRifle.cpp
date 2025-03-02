@@ -3,6 +3,8 @@
 
 #include "Code/Actors/BaseRifle.h"
 #include "Code/Actors/Projectile.h"
+#include <Code/Actors/BasePlayer.h>
+#include <Kismet/KismetMathLibrary.h>
 
 // Sets default values
 ABaseRifle::ABaseRifle()
@@ -15,7 +17,6 @@ ABaseRifle::ABaseRifle()
 
 	// Set the projectile class
 	ProjectileClass = AProjectile::StaticClass();
-
 }
 
 // Called when the game starts or when spawned
@@ -39,26 +40,37 @@ void ABaseRifle::Attack()
 	AProjectile* SpawnedProjectile = nullptr;
 
 	FVector pos;
-	/*if (baseRifleMesh)
+	FRotator rotator;
+
+	ABasePlayer* Player = Cast<ABasePlayer>(ParentPawn);
+	if (Player)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Base Rifle Mesh is set in %s"), *GetName());
-		pos = baseRifleMesh->GetSocketLocation(WeaponSocketName);
+		auto hudWidget = Player->GetHUDWidget();
+		// Player-specific logic for setting rotation
+		if (!hudWidget) return;
+
+		UPlayerHUD* PlayerHUD = Cast<UPlayerHUD>(hudWidget);
+		if (!PlayerHUD) return;
+
+		FVector StartLocation = GetSource();  // Get rifle's firing position
+		FVector EndLocation = PlayerHUD->GetDestination(); // Get crosshair destination
+
+		// Calculate rotation from weapon to crosshair target
+		rotator = UKismetMathLibrary::FindLookAtRotation(StartLocation, EndLocation);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("Base Rifle Mesh is not set in %s"), *GetName());
-	}*/
-	auto rot = ParentPawn->GetBaseAimRotation();
-	auto controller = ParentPawn->GetController();
+		rotator = ParentPawn->GetBaseAimRotation();
+	}	auto controller = ParentPawn->GetController();
 	
-	pos = baseRifleMesh->GetSocketLocation(WeaponSocketName);
+	pos = GetSource();
 
 	FActorSpawnParameters spawnParams;
 	spawnParams.Owner = controller;
 	spawnParams.Instigator = ParentPawn;
 
 	if(CanShoot())
-	SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, pos, rot, spawnParams);
+	SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, pos, rotator, spawnParams);
 
 	if (SpawnedProjectile)
 	{
@@ -76,6 +88,11 @@ void ABaseRifle::Attack()
 		CallOnRifleAttack.Broadcast();
 
 	}	
+}
+
+FVector ABaseRifle::GetSource()
+{
+	return baseRifleMesh->GetSocketLocation(WeaponSocketName);
 }
 
 void ABaseRifle::ActionStopped()

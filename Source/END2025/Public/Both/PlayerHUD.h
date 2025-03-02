@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/Image.h"
 #include "PlayerHUD.generated.h"
 
 /**
@@ -18,14 +19,37 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetHealth(float p);
 
+	UFUNCTION(BlueprintPure)
+	FVector GetDestination();
+
+    virtual void NativeTick(const FGeometry& MyGeometry, float DeltaTime) override;
+
 protected:
 
-	UPROPERTY(BlueprintReadOnly, Category = HUD, meta = (BindWidget))
+    UPROPERTY(BlueprintReadOnly, Category = HUD, meta = (BindWidget))
 	class UProgressBar* HealthBar;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = HUD, meta = (BindWidget))
+    UImage* Crosshair;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HUD")
+    UMaterialInstanceDynamic* DynamicMaterial;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HUD")
+    FName ColorName;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HUD")
+    FLinearColor SafeColor;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HUD")
+    FLinearColor DangerColor;
+
+    virtual void NativeConstruct() override;
+    void UpdateCrosshair();
 private:
+	FVector EndPoint;
 
-
+    UFUNCTION(BlueprintCallable, Category = "HUD")
+    FVector2D GetCrosshairScreenPosition();
 
 };

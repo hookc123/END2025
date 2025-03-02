@@ -5,6 +5,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Code/Actors/BaseRifle.h"
+#include <Kismet/KismetMathLibrary.h>
 
 ABasePlayer::ABasePlayer()
 {
@@ -67,8 +68,6 @@ void ABasePlayer::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("HUDClass is NULL at runtime!"));
 	}
 
-	// Bind Health Events
-	//BindHealthEvents();
 }
 
 

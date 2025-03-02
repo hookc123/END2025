@@ -16,9 +16,13 @@ class END2025_API ABasePlayer : public ABaseCharacter
 	GENERATED_BODY()
 public:
 	ABasePlayer();
+
+	UUserWidget* GetHUDWidget() { return HUDWidget; }
 protected:
 
 	virtual void BeginPlay() override;
+
+	//virtual void Attack(FRotator rotator) override;
 
 	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent);// override;
 
@@ -35,10 +39,11 @@ protected:
 	APlayerController* PlayerController;
 
 
-private:
 
+private:
 	UPROPERTY()
 	UUserWidget* HUDWidget;
+
 	void InputAxisMoveForward(float AxisValue);
 
 	void InputAxisStrafe(float AxisValue);
