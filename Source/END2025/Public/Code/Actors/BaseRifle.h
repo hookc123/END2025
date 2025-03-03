@@ -21,6 +21,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = Weapon)
 	FVector GetSource();
 
+	UFUNCTION(BlueprintCallable)
+	void OwnerDied();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -57,6 +60,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = Delagate)
 	FCallOnRifleAttack CallOnRifleAttack;
 
+	bool Alive = true;
 
 
 private:

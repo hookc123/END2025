@@ -23,6 +23,18 @@ ABaseCharacter::ABaseCharacter()
 
 }
 
+void ABaseCharacter::HandleHurt(float ratio)
+{
+	CharacterAnimation->HitAnimation(ratio);
+}
+
+void ABaseCharacter::HandleDeathStart(float ratio)
+{
+	CharacterAnimation->DeathAnimation();
+	this->SetActorEnableCollision(false);
+	WeaponObject->OwnerDied();
+}
+
 // Called when the game starts or when spawned
 void ABaseCharacter::BeginPlay()
 {
@@ -51,6 +63,8 @@ void ABaseCharacter::BeginPlay()
     {
 		WeaponObject->CallOnRifleAttack.AddDynamic(CharacterAnimation, &UCharacterAnimation::FireAnimation);
 	}
+	HealthComponent->OnHurt.AddDynamic(this, &ABaseCharacter::HandleHurt);
+	HealthComponent->OnDeath.AddDynamic(this, &ABaseCharacter::HandleDeathStart);
 }
 
 void ABaseCharacter::OnFirePressed()

@@ -32,6 +32,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
 	UHealth* HealthComponent;
 
+	UFUNCTION(BlueprintCallable)
+	virtual void HandleHurt(float ratio);
+	UFUNCTION(BlueprintCallable)
+	virtual void HandleDeathStart(float ratio);
+
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 

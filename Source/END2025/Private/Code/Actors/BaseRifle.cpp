@@ -69,7 +69,7 @@ void ABaseRifle::Attack()
 	spawnParams.Owner = controller;
 	spawnParams.Instigator = ParentPawn;
 
-	if(CanShoot())
+	if(CanShoot()&& Alive)
 	SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, pos, rotator, spawnParams);
 
 	if (SpawnedProjectile)
@@ -93,6 +93,11 @@ void ABaseRifle::Attack()
 FVector ABaseRifle::GetSource()
 {
 	return baseRifleMesh->GetSocketLocation(WeaponSocketName);
+}
+
+void ABaseRifle::OwnerDied()
+{
+	Alive = false;
 }
 
 void ABaseRifle::ActionStopped()

@@ -12,7 +12,6 @@ void UCharacterAnimation::NativeUpdateAnimation(float DeltaSeconds)
 	if (pawn)
 	{
 		// Is Valid
-
 		FVector returnValue = pawn->GetVelocity();
 		velocity = returnValue.Size();
 		direction = UKismetAnimationLibrary::CalculateDirection(pawn->GetVelocity(), pawn->GetActorRotation());
@@ -23,14 +22,42 @@ void UCharacterAnimation::NativeUpdateAnimation(float DeltaSeconds)
 
 void UCharacterAnimation::FireAnimation()
 {
-	PlaySlotAnimationAsDynamicMontage(FireAsset,ActionSlotName);
+	if (FireAsset)
+	{
+		PlaySlotAnimationAsDynamicMontage(FireAsset, ActionSlotName);
+	}
+}
+
+void UCharacterAnimation::HitAnimation(float notUsed)
+{
+	if (HitAsset)
+	{
+		PlaySlotAnimationAsDynamicMontage(HitAsset, ActionSlotName);
+	}
+}
+
+void UCharacterAnimation::DeathAnimation()
+{
+	CurrentDeathAsset = DeathAssets[ FMath::Rand() % (DeathAssets.Num() - 1) ];
 }
 
 void UCharacterAnimation::PreviewWindowUpdate_Implementation()
 {
 	if (DebugFire)
 	{
-		DebugFire = !DebugFire;
+		DebugFire = false;
 		FireAnimation();
+	}
+
+	if (DebugHit)
+	{
+		DebugHit = false;
+		HitAnimation();
+	}
+
+	if (DebugDeath)
+	{
+		DebugDeath = false;
+		DeathAnimation();
 	}
 }

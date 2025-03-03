@@ -89,6 +89,23 @@ void ABasePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ABasePlayer::OnFirePressed);
 }
 
+void ABasePlayer::HandleHurt(float ratio)
+{
+	Super::HandleHurt(ratio);
+	UPlayerHUD* PlayerHUD = Cast<UPlayerHUD>(HUDWidget);
+	PlayerHUD->SetHealth(ratio);
+
+}
+
+void ABasePlayer::HandleDeathStart(float ratio)
+{
+	Super::HandleDeathStart(ratio);
+	UPlayerHUD* PlayerHUD = Cast<UPlayerHUD>(HUDWidget);
+	PlayerHUD->SetHealth(ratio);
+	DisableInput(PlayerController);
+
+}
+
 void ABasePlayer::InputAxisMoveForward(float AxisValue)
 {
 	// Get control Rotation

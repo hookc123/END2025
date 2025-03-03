@@ -38,6 +38,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
 	APlayerController* PlayerController;
 
+	void HandleHurt(float ratio) override;
+
+	void HandleDeathStart(float ratio) override;
 
 
 private:
